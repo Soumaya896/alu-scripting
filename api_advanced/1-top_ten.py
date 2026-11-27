@@ -1,38 +1,38 @@
 #!/usr/bin/python3
-"""Module to fetch and print the top 10 hot posts for a subreddit."""
+"""Print the titles of the first 10 hot posts for a subreddit."""
 import requests
 
 
 def top_ten(subreddit):
-    """Print the titles of the first 10 hot posts for a given subreddit."""
+    """Query Reddit API and print first 10 hot post titles or None."""
     if not subreddit or not isinstance(subreddit, str):
-        print("None")
+        print(None)
         return
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {"User-Agent": "python:alu.api_advanced:v1.0 (by /u/soumaya896)"}
+    headers = {"User-Agent": "linux:alu.api_advanced:v1.0 (by /u/soumaya896)"}
     params = {"limit": 10}
 
     try:
-        response = requests.get(
+        resp = requests.get(
             url,
             headers=headers,
             params=params,
             allow_redirects=False,
             timeout=10,
         )
-        if response.status_code != 200:
-            print("None")
+        if resp.status_code != 200:
+            print(None)
             return
 
-        posts = response.json().get("data", {}).get("children", [])
-        if not posts:
-            print("None")
+        children = resp.json().get("data", {}).get("children", [])
+        if not children:
+            print(None)
             return
 
-        for post in posts[:10]:
-            title = post.get("data", {}).get("title")
+        for item in children[:10]:
+            title = item.get("data", {}).get("title")
             if title is not None:
                 print(title)
     except Exception:
-        print("None")
+        print(None)
